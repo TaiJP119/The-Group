@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <title>Attendance Analytics</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart(metrics) {
+      var data = google.visualization.arrayToDataTable([
+        ['Status', 'Number of Employees'],
+        ['Present', metrics.present],
+        ['Absent', metrics.absent]
+      ]);
+
+      var options = {
+        title: 'User-Attendance Status',
+        is3D: true,
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+      chart.draw(data, options);
+    }
+
+    function loadMetrics() {
+      google.script.run.withSuccessHandler(drawChart).getMetrics();
+    }
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f4;
+      text-align: center;
+      /* Center content horizontally */
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body onload="loadMetrics()">
+  <div class="container">
+    <h1>Team Reports</h1>
+    <div id="piechart_3d" style="width: 800px; height: 400px;"></div>
+    <div>
+      <h2>User-Attendance Status</h2>
+      <ul id="metrics">
+        <li id="totalEmployees"></li>
+        <li id="present"></li>
+        <li id="absent"></li>
+      </ul>
+      <!-- <button id="home-button">Back to Home Page</button> -->
+    </div>
+  </div>
+  <script>
+    function displayMetrics(metrics) {
+      document.getElementById('totalEmployees').textContent = 'Total Employees: ' + metrics.totalEmployees;
+      document.getElementById('present').textContent = 'Present: ' + metrics.present;
+      document.getElementById('absent').textContent = 'Absent: ' + metrics.absent;
+    }
+
+    function loadMetrics() {
+      google.script.run.withSuccessHandler(function(metrics) {
+        drawChart(metrics);
+        displayMetrics(metrics);
+      }).getMetrics();
+    }
+
+    function changePage(page) {
+    document.open();
+    document.write(page);
+    document.close();
+  }
+
+  // document.getElementById('home-button').addEventListener('click', function() {
+  // google.script.run.withSuccessHandler(changePage).goToHRHome()
+  //  });
+  </script>
+</body>
+
+</html>

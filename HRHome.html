@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <? var url = getUrl(); ?>
+  <div class="container">
+    <h1>Welcome,
+      <?= employee.name ?>!
+    </h1>
+    <p>Email:
+      <?= employee.email ?>
+    </p>
+    <p>Phone Number:
+      <?= employee.phonenumber ?>
+    </p>
+    <p>Age:
+      <?= employee.age ?>
+    </p>
+    <p>Role:
+      <?= employee.role ?>
+    </p>
+    <p>Salary:
+      <?= employee.salary ?>
+    </p>
+    <p>Benefits:
+      <?= employee.benefits ?>
+    </p>
+    <p>Performance:
+      <?= employee.performance ?>
+    </p>
+    <p>Joining Date:
+      <?= employee.date ?>
+    </p>
+     <p>Click here to submit a leave request: 
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSdofoPgUfJPJfbVc5qnJqEIlBUSnFJdZTSiG69nljD6IpI2Dg/viewform?pli=1&pli=1">Leave Appeal</a>
+</p>
+
+    <!-- Button to navigate to the attendance form -->
+    <button id="attendance-form-button">Go to Attendance Form</button>
+
+    <!-- Button to Announcement -->
+    <button id="announcement-button">Announcements</button>
+
+    <!-- Button to navigate to the analytics page -->
+    <button id="analytics-button">View Analytics</button>
+
+    <!-- Button to navigate to the interview scheduling form -->
+    <button id="interview-form-button">Schedule Interview</button>
+
+    <form id="logout-form" method="POST" action="<?!= url ?>">
+      <input type="submit" name="LogoutButton" value="Logout">
+    </form>
+  </div>
+
+  <script>
+  function changePage(page) {
+    document.open();
+    document.write(page);
+    document.close();
+  }
+
+  // Load the attendance form page
+  document.getElementById('attendance-form-button').addEventListener('click', function() {
+  google.script.run.withSuccessHandler(changePage).loadAttendanceForm()
+   });
+  // Load the announcements page
+  document.getElementById('announcement-button').addEventListener('click', function() {
+  // console.log('Announcement button clicked'); // Log to check if the button is clicked
+  google.script.run.withSuccessHandler(changePage).loadDisplay();
+  });
+  document.getElementById('analytics-button').addEventListener('click', function() {
+    google.script.run.withSuccessHandler(changePage).loadAnalyticsPage();
+  });
+
+    document.getElementById('interview-form-button').addEventListener('click', function() {
+      google.script.run.withSuccessHandler(changePage).loadInterviewForm();
+    });
+
+  </script>
+</body>
+
+</html>

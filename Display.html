@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+
+    html, body {
+    height: 100%;
+    }
+
+    html {
+        display: table;
+        margin: auto;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      display: table-cell;
+      vertical-align: middle;
+      /* display: flex; */
+      /* flex-direction: row;
+      align-items: center;  */
+      /* justify-content: center; Center content vertically */
+      height: 100vh; /* Full viewport height */
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px; /* Adjust this as necessary */
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .announcements {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center announcements horizontally */
+    }
+
+    .announcement {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 800px; /* Adjust this as necessary */
+      text-align: center; /* Center text inside announcement */
+    }
+
+    .announcement iframe {
+      max-width: 100%; /* Ensure iframe fits within the container */
+      height: auto;
+      margin-top: 10px;
+      border-radius: 8px; /* Optional: Add rounded corners to iframes */
+    }
+
+
+    .announcement-banner {
+      background-color: #007bff; /* Change this color as needed */
+      color: white;
+      padding: 10px 20px;
+      margin: -20px -20px 20px -20px; /* Negative margins to cover the announcement card edges */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 8px 8px 0 0; /* Rounded top corners */
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      display: table-cell;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 10%;
+      width: 100vw;
+      max-width: 800px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Company Announcements</h1>
+    <div class="announcements" id="announcements"></div>
+
+    <div class="form-container">
+      <form id="announcement-form">
+        <h2>Add New Announcement</h2>
+        <textarea id="announcement-text" placeholder="Announcement text..." required></textarea>
+        <input type="file" id="announcement-image" accept="image/*">
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function fetchAnnouncements() {
+      google.script.run.withSuccessHandler(function(data) {
+        var announcementsDiv = document.getElementById('announcements');
+        announcementsDiv.innerHTML = ''; // Clear previous announcements
+
+        data.forEach(function(announcement) {
+          var announcementDiv = document.createElement('div');
+          announcementDiv.className = 'announcement';
+
+          var announcementBanner = document.createElement('div');
+          announcementBanner.className = 'announcement-banner';
+
+          var announcementTitle = document.createElement('div');
+          announcementTitle.innerText = 'Announcement'; // Replace with dynamic title if available
+          announcementBanner.appendChild(announcementTitle);
+
+          var announcementDate = document.createElement('div');
+          announcementDate.innerText = 'Just now'; // Replace with dynamic timestamp if available
+          announcementBanner.appendChild(announcementDate);
+
+          announcementDiv.appendChild(announcementBanner);
+
+          var announcementText = document.createElement('h2');
+          announcementText.innerText = announcement.text;
+          announcementDiv.appendChild(announcementText);
+
+          if (announcement.imageUrl) {
+            var announcementIframe = document.createElement('iframe');
+            announcementIframe.src = announcement.imageUrl;
+            announcementIframe.width = "640";
+            announcementIframe.height = "480";
+            announcementIframe.allow = "autoplay";
+            announcementDiv.appendChild(announcementIframe);
+          }
+
+          announcementsDiv.appendChild(announcementDiv);
+        });
+      }).getAnnouncements();
+    }
+
+    document.getElementById('announcement-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var text = document.getElementById('announcement-text').value;
+      var imageFile = document.getElementById('announcement-image').files[0];
+
+      if (imageFile) {
+        var reader = new FileReader();
+        reader.onloadend = function() {
+          var imageUrl = reader.result; // Base64 encoded image
+          google.script.run.withSuccessHandler(function(imageDriveUrl) {
+            google.script.run.withSuccessHandler(function() {
+              fetchAnnouncements(); // Refresh the announcements after adding a new one
+            }).addAnnouncement(text, imageDriveUrl);
+          }).uploadImage(imageUrl, imageFile.name);
+        }
+        reader.readAsDataURL(imageFile);
+      } else {
+        google.script.run.withSuccessHandler(function() {
+          fetchAnnouncements(); // Refresh the announcements after adding a new one
+        }).addAnnouncement(text, '');
+      }
+
+      document.getElementById('announcement-form').reset();
+    });
+
+    fetchAnnouncements(); // Load announcements when the page loads
+  </script>
+</body>
+</html>

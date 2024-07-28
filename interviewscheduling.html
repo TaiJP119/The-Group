@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    h1{
+      text-align: center;
+      color: #333;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #responseMessage {
+      margin-top: 20px;
+      text-align: center;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Schedule an Interview</h1>
+  <form id="interviewForm">
+    <label for="candidateName">Candidate Name:</label>
+    <input type="text" id="candidateName" name="candidateName" required><br>
+
+    <label for="candidateEmail">Candidate Email:</label>
+    <input type="email" id="candidateEmail" name="candidateEmail" required><br>
+
+    <label for="position">Position:</label>
+    <input type="text" id="position" name="position" required><br>
+
+    <label for="interviewer">Interviewer:</label>
+    <input type="text" id="interviewer" name="interviewer" required><br>
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required><br>
+
+    <label for="time">Time:</label>
+    <input type="time" id="time" name="time" required><br>
+
+    <label for="sendEmail">Send Email Notification:</label>
+    <input type="checkbox" id="sendEmail" name="sendEmail"><br>
+
+    <button type="button" onclick="scheduleInterview()">Schedule Interview</button>
+  </form>
+  <div id="responseMessage"></div>
+
+  <script>
+    function scheduleInterview() {
+      const form = document.getElementById('interviewForm');
+      const formData = new FormData(form);
+
+      const interviewDetails = {
+        candidateName: formData.get('candidateName'),
+        candidateEmail: formData.get('candidateEmail'),  
+        position: formData.get('position'),
+        interviewer: formData.get('interviewer'),
+        date: formData.get('date'),
+        time: formData.get('time'),
+        sendEmail: formData.get('sendEmail') === 'on'
+      };
+
+      google.script.run
+        .withSuccessHandler(function(response) {
+          document.getElementById('responseMessage').innerText = response;
+          form.reset(); 
+        })
+        .scheduleInterview(interviewDetails);
+    }
+  </script>
+</body>
+</html>
