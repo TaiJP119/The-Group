@@ -1,7 +1,8 @@
 # The-Group
 GDSC Google Workspace Hackathon Preliminary Round Submission by The Group
 
-Use Case
+<b>Use Case</b>
+
 Human Resources 
 
 Problem Statement
