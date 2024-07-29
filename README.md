@@ -1,4 +1,4 @@
-# The-Group
+# The Group
 GDSC Google Workspace Hackathon Preliminary Round Submission by The Group
 
 <b>Case Study 2</b>
