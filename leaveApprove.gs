@@ -120,8 +120,18 @@ function onFormSubmit(e) {
    if (decision === "approve") {
     // Assuming the leave remaining is in the 9th column
     var leaveRemaining = data[rowIndex][8];
-    if (leaveRemaining > 0) {
-      leaveRemaining -= 1;
+
+    // Assuming "From Date" is in the 6th column and "To Date" is in the 7th column
+    var fromDate = new Date(data[rowIndex][5]);
+    var toDate = new Date(data[rowIndex][6]);
+
+    // Calculate the difference in days
+    var timeDiff = Math.abs(toDate.getTime() - fromDate.getTime());
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // Adding 1 to include the last day
+
+    // Update leave remaining
+    if (leaveRemaining >= diffDays) {
+      leaveRemaining -= diffDays;
       originalSheet.getRange(rowIndex + 1, 9).setValue(leaveRemaining);
     }
   }
@@ -150,6 +160,7 @@ function createOnFormSubmitTrigger() {
     .onFormSubmit()
     .create();
 }
+
 
 
 
