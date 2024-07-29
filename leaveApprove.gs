@@ -117,7 +117,7 @@ function onFormSubmit(e) {
     }
   }
 
-   if (decision === "approve") {
+  if (decision === "approve") {
     // Assuming the leave remaining is in the 9th column
     var leaveRemaining = data[rowIndex][8];
 
@@ -160,7 +160,6 @@ function createOnFormSubmitTrigger() {
     .onFormSubmit()
     .create();
 }
-
 
 
 
