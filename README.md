@@ -5,12 +5,12 @@ GDSC Google Workspace Hackathon Preliminary Round Submission by The Group
 
 Human Resources 
 
-Problem Statement
+<b>Problem Statement</b>
 1. Integration of Employee Data Management Systems
 2. Streamlining the Recruitment Process
 3. Automating Leave Tracking and Management
 4. Enhanced Communication System
 
-Solution
+<b>Solution</b>
 
 An Employee Data Management WebApp
