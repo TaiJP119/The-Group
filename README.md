@@ -1,7 +1,7 @@
 # The-Group
 GDSC Google Workspace Hackathon Preliminary Round Submission by The Group
 
-<b>Use Case</b>
+<b>Case Study 2</b>
 
 Human Resources 
 
