@@ -32,7 +32,7 @@ function doPost(e) {
 
   // Check if it's admin
   if (e.parameter.email === 'admin@gmail.com' && e.parameter.password === 'password123') {
-    return HtmlService.createHtmlOutputFromFile('HRHome');
+    return HtmlService.createHtmlOutputFromFile('Index');
   }
 
   // Check user credentials
